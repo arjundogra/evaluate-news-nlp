@@ -7,7 +7,7 @@ module.exports = {
 	entry: './src/client/index.js',
 	mode: "development",
 	devServer: {
-	    port: 3000
+	    port: 8082
 	},
 	output:{
 		libraryTarget:'var',

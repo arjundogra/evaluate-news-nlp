@@ -3,13 +3,24 @@ dotenv.config();
 var path = require('path')
 const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
+const bodyParser= require('body-parser');
+const cors = require('cors');
 var aylien = require("aylien_textapi");
 
 const app = express()
 
 app.use(express.static('dist'))
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-console.log(__dirname)
+// Cors for cross origin allowance
+
+app.use(cors());
+
+var textAPI = new aylien({
+    application_id: process.env.API_ID,
+    application_key: process.env.API_KEY
+    });
 
 app.get('/', function (req, res) {
     // res.sendFile('dist/index.html')
@@ -17,31 +28,27 @@ app.get('/', function (req, res) {
 })
 
 // designates what port the app will listen to for incoming requests
-app.listen(8082, function () {
-    console.log('Example app listening on port 8082!')
+app.listen(8083, function () {
+    console.log('Example app listening on port 8083!')
 })
 
-app.get('/api/:data',async function (req, res) {
+app.post('/api',(req, res) => {
     console.log("hello")
-    const text = req.params.data
-    console.log(text)
-})
-
-var textapi = new aylien({
-application_id: process.env.API_ID,
-application_key: process.env.API_KEY
+    const data = req.body;
+    let formInput = req.body.url;
+    textAPI.sentiment({
+        'text': formInput,
+        mode: 'Document'
+    }, function(error, response) {
+        console.log(response)
+        res.send(response)
+    });
 });
+
+
 
 console.log({
 application_id: process.env.API_ID,
 application_key: process.env.API_KEY
-});
-
-textapi.sentiment({
-    'text': 'John is a very good football player!'
-}, function(error, response) {
-    if (error === null) {
-        console.log(response);
-    }
 });
 
