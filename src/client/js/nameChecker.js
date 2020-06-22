@@ -1,16 +1,14 @@
-function checkForName(inputText) {
-    console.log("::: Running checkForName :::", inputText);
-    let names = [
-        "Picard",
-        "Janeway",
-        "Kirk",
-        "Archer",
-        "Georgiou"
-    ]
+function CheckURL(url) {
+    var validUrl = require('valid-url');
 
-    if(names.includes(inputText)) {
-        alert("Welcome, Captain!")
+    if (validUrl.isUri(url)){
+        console.log('Looks like an URI');
+        return true;
+    } 
+    else {
+        console.log('Not a URI');
+        return false;
     }
-}
+    }
 
-export { checkForName }
+export { CheckURL }

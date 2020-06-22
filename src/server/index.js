@@ -22,6 +22,11 @@ var textAPI = new aylien({
     application_key: process.env.API_KEY
     });
 
+if (!(('API_KEY' in process.env) && ('API_ID' in process.env))) {
+  throw "ERROR: Could not find Aylien App ID and/or API Key." +
+  " Is the .env file correctly placed?"
+}
+
 app.get('/', function (req, res) {
     // res.sendFile('dist/index.html')
     res.sendFile(path.resolve('dist/index.html'))
@@ -33,14 +38,13 @@ app.listen(8083, function () {
 })
 
 app.post('/api',(req, res) => {
-    console.log("hello")
-    const data = req.body;
-    let formInput = req.body.url;
+    console.log("Working");
+    const formInput = req.body.url;
+    console.log(formInput);
     textAPI.sentiment({
         'text': formInput,
-        mode: 'Document'
-    }, function(error, response) {
-        console.log(response)
+    },function(error, response) {
+        console.log(response);
         res.send(response)
     });
 });
